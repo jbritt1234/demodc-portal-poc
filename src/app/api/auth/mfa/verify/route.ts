@@ -43,9 +43,13 @@ export async function POST(request: NextRequest) {
     // Set httpOnly cookies
     const cookieStore = await cookies();
     
+    // Use COOKIE_SECURE env var, default to false for easier deployment
+    // Set to 'true' when you have HTTPS configured
+    const isSecure = process.env.COOKIE_SECURE === 'true';
+    
     cookieStore.set('demodc_auth', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecure,
       sameSite: 'lax',
       maxAge: 15 * 60, // 15 minutes
       path: '/',
@@ -53,7 +57,7 @@ export async function POST(request: NextRequest) {
 
     cookieStore.set('demodc_refresh', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecure,
       sameSite: 'lax',
       maxAge: 30 * 24 * 60 * 60, // 30 days
       path: '/',
