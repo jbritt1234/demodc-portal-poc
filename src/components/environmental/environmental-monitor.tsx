@@ -203,7 +203,7 @@ export function EnvironmentalMonitor({
                   <span className="text-xl text-slate-500">°F</span>
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  Last updated: {zone.temperature ? new Date(zone.temperature.timestamp).toLocaleTimeString() : 'N/A'}
+                  Last updated: <span suppressHydrationWarning>{zone.temperature ? new Date(zone.temperature.timestamp).toLocaleTimeString() : 'N/A'}</span>
                 </p>
 
                 {/* Mini chart placeholder */}
@@ -231,7 +231,7 @@ export function EnvironmentalMonitor({
                   <span className="text-xl text-slate-500">%</span>
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  Last updated: {zone.humidity ? new Date(zone.humidity.timestamp).toLocaleTimeString() : 'N/A'}
+                  Last updated: <span suppressHydrationWarning>{zone.humidity ? new Date(zone.humidity.timestamp).toLocaleTimeString() : 'N/A'}</span>
                 </p>
 
                 {/* Mini chart placeholder */}
@@ -319,7 +319,7 @@ export function EnvironmentalMonitor({
                     key={reading.readingId}
                     className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
                   >
-                    <td className="py-3 px-4 text-sm text-slate-900">
+                    <td className="py-3 px-4 text-sm text-slate-900" suppressHydrationWarning>
                       {new Date(reading.timestamp).toLocaleTimeString()}
                     </td>
                     <td className="py-3 px-4 text-sm text-slate-900">

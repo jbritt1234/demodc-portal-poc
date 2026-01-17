@@ -405,7 +405,7 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
                     key={log.logId}
                     className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
                   >
-                    <td className="py-3 px-4 text-sm text-slate-900">
+                    <td className="py-3 px-4 text-sm text-slate-900" suppressHydrationWarning>
                       {formatDateTime(log.timestamp)}
                     </td>
                     <td className="py-3 px-4 text-sm text-slate-900">
