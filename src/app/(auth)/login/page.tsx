@@ -41,7 +41,7 @@ export default function LoginPage() {
         <div className="bg-white rounded-lg shadow-xl p-8">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4 bg-white p-4 rounded-lg">
-              <img src="/logo.png" alt="PerimeterDC" className="h-26 w-auto" />
+              <img src="/logo3.png" alt="PerimeterDC" className="h-26 w-auto" />
             </div>
             <h1 className="text-3xl font-bold text-slate-900 mb-2">PerimeterDC Portal</h1>
             <p className="text-slate-600">Sign in to access your data center</p>
