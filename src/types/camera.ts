@@ -14,6 +14,8 @@ export interface CameraMetadata {
   audioEnabled?: boolean;
   model?: string;
   installDate?: string;
+  fieldOfView?: string;
+  motionDetection?: boolean;
 }
 
 export interface Camera {
@@ -21,6 +23,7 @@ export interface Camera {
   name: string;
   location: string; // locationId
   zone: string; // zoneId
+  assetId: string; // The asset this camera is monitoring
   streamUrl: string;
   thumbnailUrl?: string;
   type: CameraType;

@@ -20,6 +20,10 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
   const [sortField, setSortField] = useState<SortField>('timestamp');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
+  // Date range state
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+
   // Calculate stats
   const entriesCount = logs.filter((log) => log.action === 'entry').length;
   const exitsCount = logs.filter((log) => log.action === 'exit').length;
@@ -80,6 +84,27 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
       filtered = logs.filter((log) => log.action === 'denied');
     }
 
+    // Apply date range filter
+    if (startDate || endDate) {
+      filtered = filtered.filter((log) => {
+        const logDate = new Date(log.timestamp);
+        const logDateOnly = new Date(logDate.getFullYear(), logDate.getMonth(), logDate.getDate());
+
+        if (startDate && endDate) {
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+          return logDateOnly >= start && logDateOnly <= end;
+        } else if (startDate) {
+          const start = new Date(startDate);
+          return logDateOnly >= start;
+        } else if (endDate) {
+          const end = new Date(endDate);
+          return logDateOnly <= end;
+        }
+        return true;
+      });
+    }
+
     // Apply sort
     const sorted = [...filtered].sort((a, b) => {
       let aValue: string | number | boolean;
@@ -120,7 +145,7 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
     });
 
     return sorted;
-  }, [logs, filter, sortField, sortDirection]);
+  }, [logs, filter, sortField, sortDirection, startDate, endDate]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -158,6 +183,11 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
     return sortDirection === 'asc' ? '↑' : '↓';
   };
 
+  const clearDateRange = () => {
+    setStartDate('');
+    setEndDate('');
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -166,6 +196,61 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
           View access events for your assigned cages and racks.
         </p>
       </div>
+
+      {/* Date Range Filter */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row md:items-end gap-4">
+            <div className="flex-1">
+              <label htmlFor="start-date" className="block text-sm font-medium text-slate-700 mb-2">
+                Start Date
+              </label>
+              <input
+                id="start-date"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              />
+            </div>
+            <div className="flex-1">
+              <label htmlFor="end-date" className="block text-sm font-medium text-slate-700 mb-2">
+                End Date
+              </label>
+              <input
+                id="end-date"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              />
+            </div>
+            <div className="flex gap-2">
+              {(startDate || endDate) && (
+                <Button
+                  onClick={clearDateRange}
+                  variant="secondary"
+                  size="sm"
+                  className="whitespace-nowrap"
+                >
+                  Clear Dates
+                </Button>
+              )}
+              <div className="px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 flex items-center">
+                <span className="text-sm text-slate-600">
+                  {startDate || endDate ? (
+                    <>
+                      {filteredAndSortedLogs.length} of {logs.length} events
+                    </>
+                  ) : (
+                    <>All {logs.length} events</>
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Stats Summary - Clickable Filters */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
