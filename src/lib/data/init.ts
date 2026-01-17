@@ -1,6 +1,7 @@
 import { dataStore } from './store';
 import { seedTenants, seedLocations, seedAssets, seedCameras, seedAnnouncements } from './seed';
 import { generateAccessLogs, generateEnvironmentalReadings } from './generators';
+import { generateRackPowerReadings } from './generators/power-generator';
 
 /**
  * Initialize the data store with seed data and generated time-series data
@@ -71,6 +72,28 @@ export function initializeDataStore(): void {
     dataStore.environmentalReadings.push(...readings);
   });
 
+  console.log('[DataStore] Generating power readings...');
+  seedAssets.forEach((asset) => {
+    // Only generate power readings for racks (not cages)
+    if (asset.type === 'rack') {
+      // Determine rack type based on name or use standard as default
+      let rackType: 'standard' | 'high-density' | 'blade' = 'standard';
+
+      if (asset.name.toLowerCase().includes('blade')) {
+        rackType = 'blade';
+      } else if (asset.name.toLowerCase().includes('high')) {
+        rackType = 'high-density';
+      }
+
+      const readings = generateRackPowerReadings(
+        asset.assetId,
+        asset.tenantId,
+        rackType
+      );
+      dataStore.powerReadings.push(...readings);
+    }
+  });
+
   console.log('[DataStore] Initialization complete!');
   console.log(`  - Tenants: ${dataStore.tenants.size}`);
   console.log(`  - Locations: ${dataStore.locations.size}`);
@@ -79,6 +102,7 @@ export function initializeDataStore(): void {
   console.log(`  - Announcements: ${dataStore.announcements.size}`);
   console.log(`  - Access Logs: ${dataStore.accessLogs.length}`);
   console.log(`  - Environmental Readings: ${dataStore.environmentalReadings.length}`);
+  console.log(`  - Power Readings: ${dataStore.powerReadings.length}`);
 }
 
 // Initialize immediately when this module is imported

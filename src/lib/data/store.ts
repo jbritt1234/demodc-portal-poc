@@ -7,6 +7,7 @@ import type {
   AccessLog,
   EnvironmentalReading,
   Announcement,
+  PowerReading,
 } from '@/types';
 
 /**
@@ -25,6 +26,7 @@ class DataStore {
   // Time-series data (arrays for easier filtering)
   accessLogs: AccessLog[] = [];
   environmentalReadings: EnvironmentalReading[] = [];
+  powerReadings: PowerReading[] = [];
 
   /**
    * Get access logs with tenant filtering and pagination
@@ -171,6 +173,72 @@ class DataStore {
   }
 
   /**
+   * Get power readings with filtering
+   */
+  getPowerReadings(params: {
+    tenantId: string;
+    assetIds?: string[];
+    startDate?: string;
+    endDate?: string;
+    granularity?: 'hourly' | 'daily' | 'weekly' | 'monthly';
+    limit?: number;
+    offset?: number;
+  }): { readings: PowerReading[]; total: number } {
+    let filtered = this.powerReadings.filter(
+      (reading) => reading.tenantId === params.tenantId
+    );
+
+    // Filter by assigned assets
+    if (params.assetIds && params.assetIds.length > 0) {
+      filtered = filtered.filter((reading) =>
+        params.assetIds!.includes(reading.assetId)
+      );
+    }
+
+    // Filter by date range
+    if (params.startDate) {
+      filtered = filtered.filter((reading) => reading.timestamp >= params.startDate!);
+    }
+    if (params.endDate) {
+      filtered = filtered.filter((reading) => reading.timestamp <= params.endDate!);
+    }
+
+    // Filter by granularity
+    if (params.granularity) {
+      filtered = filtered.filter(
+        (reading) => reading.granularity === params.granularity
+      );
+    }
+
+    // Sort by timestamp (most recent first)
+    filtered.sort(
+      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
+
+    const total = filtered.length;
+    const offset = params.offset || 0;
+    const limit = params.limit || 100;
+
+    return {
+      readings: filtered.slice(offset, offset + limit),
+      total,
+    };
+  }
+
+  /**
+   * Get most recent power reading for an asset
+   */
+  getLatestPowerReading(assetId: string): PowerReading | undefined {
+    const readings = this.powerReadings
+      .filter((reading) => reading.assetId === assetId)
+      .sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      );
+
+    return readings[0];
+  }
+
+  /**
    * Clear all data (useful for testing)
    */
   clear(): void {
@@ -182,6 +250,7 @@ class DataStore {
     this.announcements.clear();
     this.accessLogs = [];
     this.environmentalReadings = [];
+    this.powerReadings = [];
   }
 }
 

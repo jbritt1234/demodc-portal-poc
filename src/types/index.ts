@@ -13,3 +13,4 @@ export * from './camera';
 export * from './environmental';
 export * from './announcement';
 export * from './weather';
+export * from './power';

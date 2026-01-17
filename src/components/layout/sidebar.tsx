@@ -8,6 +8,7 @@ const navigation = [
   { name: 'Access Logs', href: '/access-logs', icon: '🔐' },
   { name: 'Cameras', href: '/cameras', icon: '📹' },
   { name: 'Environmental', href: '/environmental', icon: '🌡️' },
+  { name: 'Power', href: '/power', icon: '⚡' },
   { name: 'Settings', href: '/settings', icon: '⚙️' },
 ];
 
