@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import type { AccessLog } from '@/types';
 
 interface AccessLogsTableProps {
@@ -23,6 +24,49 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
   const entriesCount = logs.filter((log) => log.action === 'entry').length;
   const exitsCount = logs.filter((log) => log.action === 'exit').length;
   const deniedCount = logs.filter((log) => log.action === 'denied').length;
+
+  // CSV Export function
+  const exportToCSV = () => {
+    // CSV headers
+    const headers = ['Date & Time', 'User', 'Badge ID', 'Action', 'Asset', 'Zone', 'Status'];
+
+    // Convert logs to CSV rows
+    const rows = filteredAndSortedLogs.map((log) => [
+      new Date(log.timestamp).toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+      log.userName,
+      log.badgeId,
+      log.action,
+      log.asset,
+      log.zone,
+      log.success ? 'Success' : 'Denied',
+    ]);
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
+    ].join('\n');
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', `access-logs-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Filter and sort logs
   const filteredAndSortedLogs = useMemo(() => {
@@ -186,14 +230,25 @@ export function AccessLogsTable({ logs, total }: AccessLogsTableProps) {
       {/* Access Logs Table */}
       <Card>
         <CardHeader>
-          <CardTitle>
-            Recent Access Events
-            {filter !== 'all' && (
-              <span className="text-sm font-normal text-slate-500 ml-2">
-                ({filteredAndSortedLogs.length} of {logs.length} events)
-              </span>
-            )}
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>
+              Recent Access Events
+              {filter !== 'all' && (
+                <span className="text-sm font-normal text-slate-500 ml-2">
+                  ({filteredAndSortedLogs.length} of {logs.length} events)
+                </span>
+              )}
+            </CardTitle>
+            <Button
+              onClick={exportToCSV}
+              variant="secondary"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <span>📥</span>
+              Export CSV
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
