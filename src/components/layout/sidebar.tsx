@@ -18,8 +18,9 @@ export function Sidebar() {
   return (
     <div className="flex h-full w-64 flex-col bg-slate-900">
       {/* Logo */}
-      <div className="flex h-16 items-center px-6 border-b border-slate-800">
-        <h1 className="text-xl font-bold text-white">DemoDC Portal</h1>
+      <div className="flex h-16 items-center px-6 border-b border-slate-800 gap-3">
+        <img src="/logo.png" alt="PerimeterDC" className="h-8 w-auto" />
+        <h1 className="text-xl font-bold text-white">PerimeterDC</h1>
       </div>
 
       {/* Navigation */}
@@ -49,7 +50,7 @@ export function Sidebar() {
       {/* Footer */}
       <div className="border-t border-slate-800 p-4">
         <p className="text-xs text-slate-400 text-center">
-          DemoDC Portal v1.0
+          PerimeterDC v1.0
         </p>
       </div>
     </div>

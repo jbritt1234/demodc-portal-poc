@@ -1,4 +1,4 @@
-# DemoDC Portal - POC
+# PerimeterDC Portal - POC
 
 A proof-of-concept secure client portal for a data center company. This demo showcases architectural thinking, security-first design, and modern web development practices.
 
@@ -35,7 +35,7 @@ A proof-of-concept secure client portal for a data center company. This demo sho
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd demodc-portal-poc
+cd perimeterdc-portal
 
 # Install dependencies
 npm install
@@ -249,4 +249,4 @@ This is a proof-of-concept project for demonstration purposes.
 
 ---
 
-Built with ❤️ for RadiusDC
+Built with ❤️ for PerimeterDC

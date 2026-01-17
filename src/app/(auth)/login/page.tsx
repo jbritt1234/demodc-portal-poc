@@ -40,7 +40,10 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-lg shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">DemoDC Portal</h1>
+            <div className="flex justify-center mb-4">
+              <img src="/logo.png" alt="PerimeterDC" className="h-16 w-auto" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">PerimeterDC Portal</h1>
             <p className="text-slate-600">Sign in to access your data center</p>
           </div>
 

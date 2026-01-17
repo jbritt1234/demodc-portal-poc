@@ -3,7 +3,7 @@
  */
 
 // App info
-export const APP_NAME = 'RadiusDC Portal';
+export const APP_NAME = 'PerimeterDC Portal';
 export const APP_DESCRIPTION = 'Secure Data Center Client Portal';
 export const APP_VERSION = '1.0.0-poc';
 
@@ -12,8 +12,8 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 export const API_TIMEOUT = 30000; // 30 seconds
 
 // Authentication
-export const AUTH_COOKIE_NAME = 'radiusdc_auth';
-export const REFRESH_COOKIE_NAME = 'radiusdc_refresh';
+export const AUTH_COOKIE_NAME = 'perimeterdc_auth';
+export const REFRESH_COOKIE_NAME = 'perimeterdc_refresh';
 export const TOKEN_EXPIRY = 15 * 60; // 15 minutes in seconds
 export const REFRESH_EXPIRY = 30 * 24 * 60 * 60; // 30 days in seconds
 export const MFA_CODE_LENGTH = 6;
@@ -54,7 +54,7 @@ export const ENVIRONMENTAL_THRESHOLDS = {
 
 // Weather API (National Weather Service)
 export const NWS_API_BASE = 'https://api.weather.gov';
-export const NWS_USER_AGENT = '(RadiusDC Portal POC, contact@radiusdc.com)';
+export const NWS_USER_AGENT = '(PerimeterDC Portal POC, contact@perimeterdc.com)';
 
 // Denver, CO coordinates for weather
 export const DENVER_COORDINATES = {
